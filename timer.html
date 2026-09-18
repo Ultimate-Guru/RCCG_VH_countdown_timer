@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RCCG Victory_House - Countdown Timer</title>
+
+    <!-- StyleSheet -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+</head>
+
+<body>
+
+    <!-- Ambient background glow -->
+    <div class="bg-glow"></div>
+
+    <div class="modal-bg" id="modalBg"></div>
+
+    <!-- Start Timer Panel -->
+    <div class="input-fields" id="inputFields">
+        <h2 class="panel-title">Start a Program</h2>
+
+        <div class="field-group autocomplete-wrap">
+            <label for="programName">Program Name</label>
+            <input type="text" id="programName" placeholder="Type or select a program"
+                oninput="this.value = this.value.toUpperCase(); filterOptions()">
+            <select id="programSelect" onchange="setProgramName()" size="5" style="display:none;"></select>
+        </div>
+
+        <div class="field-group">
+            <label for="minutesInput">Duration (minutes)</label>
+            <input type="number" id="minutesInput" placeholder="e.g. 15" min="1" required>
+        </div>
+
+        <button id="startBtn" onclick="startTimer()">
+            <span>Start Timer</span>
+        </button>
+    </div>
+
+    <!-- Manage Programs Modal -->
+    <div class="manager-modal" id="managerModal">
+        <h2 class="panel-title">Manage Programs</h2>
+
+        <div class="add-program-row">
+            <input type="text" id="newProgramInput" placeholder="New program name"
+                oninput="this.value = this.value.toUpperCase();">
+            <button id="addCustomProgramBtn" onclick="addNewProgram()">Add</button>
+        </div>
+
+        <div class="manager-list" id="programListContainer"></div>
+
+        <button class="close-manager-btn" onclick="toggleManager()">Close</button>
+    </div>
+
+    <!-- Main Display -->
+    <main class="stage">
+        <div class="program-name" id="programDisplay"></div>
+        <div id="timer">00:00</div>
+    </main>
+
+    <button id="openInputBtn" onclick="toggleInput();">
+        <span>Open Timer</span>
+    </button>
+    <button id="manageProgramsBtn" onclick="toggleManager();">
+        <span>Manage Programs</span>
+    </button>
+
+    <div class="btn-container">
+        <button id="pauseResumeBtn" style="display:none;" onclick="pauseResume()">Pause</button>
+        <button id="resetBtn" style="display:none;" onclick="resetTimer()">Reset Timer</button>
+    </div>
+
+    <div id="copy">Developed by Rccg Victory House Festac Media Team</div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>

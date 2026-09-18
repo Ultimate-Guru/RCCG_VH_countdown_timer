@@ -1,0 +1,464 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap');
+
+:root {
+    --bg-deep: #05070d;
+    --bg-panel: rgba(20, 24, 38, 0.72);
+    --border-soft: rgba(255, 255, 255, 0.08);
+    --accent: #6c8cff;
+    --accent-soft: #4d6bff;
+    --success: #22c55e;
+    --success-dark: #16a34a;
+    --danger: #ef4444;
+    --danger-dark: #dc2626;
+    --warning: #f59e0b;
+    --text-primary: #f4f6fb;
+    --text-muted: #9aa3b8;
+    --radius-lg: 20px;
+    --radius-md: 12px;
+    --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.55);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    font-family: "Sora", Verdana, Geneva, Tahoma, sans-serif;
+    background: radial-gradient(circle at 50% 20%, #10152a 0%, #05070d 60%, #020308 100%);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+    transition: background 0.6s ease;
+}
+
+/* Ambient glow behind the timer */
+.bg-glow {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(600px circle at 50% 35%, rgba(108, 140, 255, 0.14), transparent 60%),
+        radial-gradient(400px circle at 15% 85%, rgba(108, 140, 255, 0.08), transparent 60%);
+    z-index: 0;
+    transition: background 0.6s ease;
+}
+
+/* ================= MAIN STAGE ================= */
+
+.stage {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    padding: 20px;
+    text-align: center;
+}
+
+.program-name {
+    font-size: clamp(1.6rem, 4.5vw, 3.2rem);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    min-height: 1.2em;
+    transition: color 0.4s ease;
+}
+
+.time-up-text {
+    display: inline-block;
+    font-size: clamp(2.5rem, 8vw, 6rem);
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: 0.05em;
+}
+
+#timer {
+    font-size: clamp(5rem, 20vw, 16rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    font-variant-numeric: tabular-nums;
+    background: linear-gradient(180deg, #ffffff 0%, #c7d2fe 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 60px rgba(108, 140, 255, 0.25);
+    transition: text-shadow 0.4s ease;
+}
+
+/* Time's up state */
+body.time-up {
+    background: radial-gradient(circle at 50% 30%, #4a0d0d 0%, #1a0303 60%, #050101 100%);
+}
+
+body.time-up .bg-glow {
+    background: radial-gradient(700px circle at 50% 35%, rgba(239, 68, 68, 0.35), transparent 60%);
+}
+
+body.time-up #timer {
+    background: linear-gradient(180deg, #fff 0%, #ffb3b3 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    text-shadow: 0 0 80px rgba(239, 68, 68, 0.55);
+}
+
+body.time-up .program-name {
+    color: #ffb3b3;
+}
+
+.flashing {
+    animation: flash 1.1s ease-in-out infinite;
+}
+
+@keyframes flash {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.45;
+    }
+}
+
+/* ================= FLOATING CONTROLS ================= */
+
+#openInputBtn,
+#manageProgramsBtn {
+    position: fixed;
+    top: 18px;
+    width: auto;
+    z-index: 3;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    padding: 10px 18px;
+    border: 1px solid var(--border-soft);
+    border-radius: 999px;
+    color: var(--text-primary);
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: transform 0.15s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+#openInputBtn {
+    left: 18px;
+    background: rgba(34, 197, 94, 0.16);
+    border-color: rgba(34, 197, 94, 0.35);
+}
+
+#openInputBtn:hover {
+    background: rgba(34, 197, 94, 0.28);
+    box-shadow: 0 6px 20px rgba(34, 197, 94, 0.2);
+}
+
+#manageProgramsBtn {
+    right: 18px;
+    background: rgba(108, 140, 255, 0.16);
+    border-color: rgba(108, 140, 255, 0.35);
+}
+
+#manageProgramsBtn:hover {
+    background: rgba(108, 140, 255, 0.28);
+    box-shadow: 0 6px 20px rgba(108, 140, 255, 0.2);
+}
+
+#openInputBtn:active,
+#manageProgramsBtn:active {
+    transform: scale(0.97);
+}
+
+.btn-container {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    position: fixed;
+    bottom: 24px;
+    width: 100%;
+    padding: 0 20px;
+    z-index: 3;
+    box-sizing: border-box;
+}
+
+#pauseResumeBtn,
+#resetBtn {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    padding: 12px 26px;
+    border: none;
+    border-radius: 999px;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    transition: transform 0.15s ease, filter 0.2s ease;
+}
+
+#pauseResumeBtn {
+    background: linear-gradient(135deg, var(--success), var(--success-dark));
+}
+
+#resetBtn {
+    background: linear-gradient(135deg, #ff8a65, var(--danger-dark));
+}
+
+#pauseResumeBtn:hover,
+#resetBtn:hover {
+    filter: brightness(1.1);
+}
+
+#pauseResumeBtn:active,
+#resetBtn:active {
+    transform: scale(0.96);
+}
+
+/* ================= MODAL BACKDROP ================= */
+
+.modal-bg {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 3, 8, 0.75);
+    backdrop-filter: blur(6px);
+    z-index: 4;
+    display: none;
+}
+
+/* ================= START TIMER PANEL ================= */
+
+.input-fields,
+.manager-modal {
+    display: none;
+    flex-direction: column;
+    gap: 1.1rem;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--bg-panel);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border-soft);
+    padding: 34px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    z-index: 5;
+    width: 90%;
+    max-width: 460px;
+}
+
+.panel-title {
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.4rem;
+    margin-bottom: 4px;
+    letter-spacing: 0.02em;
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+}
+
+.field-group label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+input,
+select {
+    font-family: inherit;
+    font-size: 1.05rem;
+    padding: 12px 14px;
+    width: 100%;
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    outline: none;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+input::placeholder {
+    color: var(--text-muted);
+    text-transform: none;
+}
+
+input:focus,
+select:focus {
+    border-color: var(--accent);
+    background: rgba(108, 140, 255, 0.08);
+}
+
+input[type="number"] {
+    text-transform: none;
+}
+
+#programSelect {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    z-index: 6;
+    border-radius: var(--radius-md);
+    background: #10121c;
+    box-shadow: var(--shadow-lg);
+}
+
+#programSelect option {
+    padding: 8px 10px;
+}
+
+button {
+    font-family: inherit;
+    font-size: 1.05rem;
+    font-weight: 600;
+    padding: 13px;
+    cursor: pointer;
+    border: none;
+    border-radius: var(--radius-md);
+    color: white;
+    width: 100%;
+    transition: transform 0.15s ease, filter 0.2s ease;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+#startBtn {
+    background: linear-gradient(135deg, #00c98d, #00a86b);
+    letter-spacing: 0.03em;
+    box-shadow: 0 10px 30px rgba(0, 168, 107, 0.3);
+}
+
+#startBtn:hover {
+    filter: brightness(1.08);
+}
+
+/* ================= MANAGE PROGRAMS MODAL ================= */
+
+.manager-modal {
+    max-height: 82vh;
+    overflow-y: auto;
+}
+
+.add-program-row {
+    display: flex;
+    gap: 10px;
+}
+
+#addCustomProgramBtn {
+    width: auto;
+    padding: 0 22px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+    flex-shrink: 0;
+}
+
+.manager-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 6px;
+    max-height: 40vh;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.program-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-soft);
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
+}
+
+.action-btns {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.action-btns button {
+    width: auto;
+    padding: 7px 14px;
+    font-size: 0.78rem;
+}
+
+.edit-btn {
+    background: linear-gradient(135deg, var(--warning), #d97706);
+    color: #201400;
+}
+
+.delete-btn {
+    background: linear-gradient(135deg, var(--danger), var(--danger-dark));
+}
+
+.close-manager-btn {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid var(--border-soft) !important;
+    color: var(--text-primary) !important;
+}
+
+/* ================= FOOTER CREDIT ================= */
+
+#copy {
+    position: fixed;
+    bottom: 2.5em;
+    width: 100%;
+    text-align: center;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.371);
+    letter-spacing: 0.03em;
+    z-index: 2;
+}
+
+/* ================= SCROLLBARS ================= */
+
+.manager-modal::-webkit-scrollbar,
+.manager-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.manager-modal::-webkit-scrollbar-thumb,
+.manager-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 999px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 480px) {
+
+    .input-fields,
+    .manager-modal {
+        padding: 24px;
+    }
+
+    #openInputBtn,
+    #manageProgramsBtn {
+        font-size: 0.7rem;
+        padding: 8px 14px;
+    }
+}
