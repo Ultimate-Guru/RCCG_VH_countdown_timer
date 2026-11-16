@@ -180,6 +180,8 @@ function startTimer() {
         return;
     }
 
+    document.body.classList.remove('time-up');
+
     document.getElementById('inputFields').style.display = "none";
     document.getElementById('modalBg').style.display = "none";
     openInputBtn.innerText = "Open Timer";
@@ -222,7 +224,6 @@ function resetTimer() {
     document.getElementById('pauseResumeBtn').style.display = "none";
     document.getElementById('resetBtn').style.display = "none";
     document.body.classList.remove('time-up');
-    timerDisplay.classList.remove('flashing');
 }
 
 // Update the timer display
@@ -231,7 +232,6 @@ function updateTimer() {
         timeLeft--;
         updateDisplay();
         if (timeLeft <= 0) {
-            timerDisplay.classList.add('flashing');
             document.body.classList.add('time-up');
             elapsed = true;
         }

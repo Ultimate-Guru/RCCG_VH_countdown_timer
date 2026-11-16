@@ -7,7 +7,8 @@ A simple web countdown timer built for the **RCCG Victory House Festac Media Tea
 * **Countdown & Overtime:** Counts down your set time and shows negative numbers if a program runs over.
 * **Program Manager:** Add, edit, or delete program names. Changes save automatically in your browser.
 * **Search / Auto-complete:** Quickly search for service items when starting a timer.
-* **Time's Up Alert:** Screen flashes and turns red when time runs out.
+* **Time's Up Alert:** The screen flashes between distinct, solid red shades when time runs out.
+* **Credit Check:** The timer will not start if its RCCG Victory House developer credit has been changed or removed.
 * **Easy Controls:** Buttons to pause, resume, reset, or change settings anytime.
 
 ## 🔄 What Was Improved
@@ -18,7 +19,7 @@ Compared to the old single-file version (`rccgvictoryhousetimer.html`), the app 
 2. **Better UI & Display:**
    * Modern dark design with better lighting and fonts.
    * Scalable text (`clamp()`) so the numbers look sharp on big screens, TVs, or laptops.
-   * Smoother red flashing effect when time runs out.
+   * A clear, solid-red warning when time runs out.
 3. **Improved Popups:** Added dark background overlays so popups are easier to focus on and use during live services.
 
 ## 📁 File Structure
@@ -33,6 +34,8 @@ Compared to the old single-file version (`rccgvictoryhousetimer.html`), the app 
 1. Open `timer.html` in any web browser.
 2. Click **Open Timer**, type or pick a program, set the minutes, and click **Start Timer**.
 3. Use **Manage Programs** to add or remove default program names.
+
+The credit check is a basic check in the browser code, not secure copy protection. Anyone who edits the cloned source code can also remove the check.
 
 ## 👥 Support
 
