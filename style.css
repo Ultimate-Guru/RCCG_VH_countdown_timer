@@ -99,6 +99,17 @@ body {
     transition: text-shadow 0.4s ease;
 }
 
+.program-name,
+#timer {
+    cursor: pointer;
+}
+
+.program-name:focus-visible,
+#timer:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.7);
+    outline-offset: 8px;
+}
+
 /* Time's up state */
 body.time-up {
     background: #a80f18;
@@ -251,7 +262,8 @@ body.time-up .time-up-text {
 /* ================= START TIMER PANEL ================= */
 
 .input-fields,
-.manager-modal {
+.manager-modal,
+.edit-modal {
     display: none;
     flex-direction: column;
     gap: 1.1rem;
@@ -268,6 +280,20 @@ body.time-up .time-up-text {
     z-index: 5;
     width: 90%;
     max-width: 460px;
+}
+
+.edit-modal {
+    max-width: 420px;
+}
+
+.edit-help {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    line-height: 1.5;
+}
+
+.edit-modal #applyEditBtn {
+    background: linear-gradient(135deg, var(--accent), var(--accent-soft));
 }
 
 .panel-title {
@@ -464,7 +490,8 @@ button:active {
 @media (max-width: 480px) {
 
     .input-fields,
-    .manager-modal {
+    .manager-modal,
+    .edit-modal {
         padding: 24px;
     }
 

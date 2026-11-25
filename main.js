@@ -4,9 +4,9 @@ let openInputBtn = document.getElementById('openInputBtn');
 let programSelect = document.getElementById('programSelect');
 let interval, isPaused = true, totalTime, programName;
 let timeLeft, elapsed = false;
+let timerStarted = false;
 
 // --- DYNAMIC PROGRAM LIST LOGIC ---
-// Default list just in case it's a brand new user
 const defaultPrograms = [
     "PRAISE & WORSHIP", "OPEN HEAVENS", "OFFERING & ANNOUCEMENT",
     "OPENING PRAYER", "TESTIMONIES", "HYMN", "CHOIR MINISTRATION",
@@ -53,7 +53,7 @@ function addNewProgram() {
     if (newName && !savedPrograms.includes(newName)) {
         savedPrograms.push(newName);
         saveAndRefresh();
-        inputField.value = ""; // clear input
+        inputField.value = ""; 
     } else if (savedPrograms.includes(newName)) {
         alert("This program already exists!");
     }
@@ -91,7 +91,7 @@ function toggleManager() {
     const inputFields = document.getElementById('inputFields');
 
     if (managerModal.style.display === "none" || managerModal.style.display === "") {
-        inputFields.style.display = "none"; // Hide main inputs if open
+        inputFields.style.display = "none"; 
         managerModal.style.display = "flex";
         modalBg.style.display = "block";
         openInputBtn.innerText = "Open Timer";
@@ -103,7 +103,6 @@ function toggleManager() {
 
 // Run this once when the page loads to populate the lists
 renderPrograms();
-// ----------------------------------------
 
 
 // Enter Key Listeners
@@ -117,6 +116,18 @@ document.getElementById('newProgramInput').addEventListener('keypress', function
     if (e.key === 'Enter') { e.preventDefault(); addNewProgram(); }
 });
 
+// Allow editing from either part of the running timer display
+['programDisplay', 'timer'].forEach(id => {
+    const display = document.getElementById(id);
+    display.addEventListener('click', openTimerEdit);
+    display.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openTimerEdit();
+        }
+    });
+});
+
 // Toggle Input Fields visibility
 function toggleInput() {
     const inputFields = document.getElementById('inputFields');
@@ -124,7 +135,7 @@ function toggleInput() {
     const modalBg = document.getElementById('modalBg');
 
     if (inputFields.style.display === "none" || inputFields.style.display === "") {
-        managerModal.style.display = "none"; // Hide manager if open
+        managerModal.style.display = "none"; 
         inputFields.style.display = "flex";
         modalBg.style.display = "block";
         openInputBtn.innerText = "Close Timer";
@@ -189,6 +200,7 @@ function startTimer() {
     totalTime = minutes * 60;
     timeLeft = totalTime;
     elapsed = false;
+    timerStarted = true;
     programDisplay.innerText = programName;
 
     updateDisplay();
@@ -199,6 +211,49 @@ function startTimer() {
 
     if (interval) clearInterval(interval);
     interval = setInterval(updateTimer, 1000);
+}
+
+// Open the editor without interrupting the active countdown
+function openTimerEdit() {
+    if (!timerStarted) return;
+
+    document.getElementById('inputFields').style.display = "none";
+    document.getElementById('managerModal').style.display = "none";
+    document.getElementById('editProgramName').value = programName;
+    document.getElementById('timeAdjustment').value = "";
+    document.getElementById('editModal').style.display = "flex";
+    document.getElementById('modalBg').style.display = "block";
+    document.getElementById('editProgramName').focus();
+}
+
+// Apply a signed minute adjustment to the current remaining time
+function applyTimerEdit() {
+    const adjustmentInput = document.getElementById('timeAdjustment').value.trim();
+    const adjustment = Number(adjustmentInput || 0);
+
+    if (!Number.isSafeInteger(adjustment)) {
+        alert('Please enter a whole number of minutes.');
+        return;
+    }
+
+    const adjustedTime = timeLeft + adjustment * 60;
+    if (!Number.isSafeInteger(adjustedTime)) {
+        alert('The adjusted time is too large.');
+        return;
+    }
+
+    programName = document.getElementById('editProgramName').value.trim().toUpperCase() || "Program";
+    timeLeft = adjustedTime;
+    totalTime += adjustment * 60;
+    elapsed = timeLeft <= 0;
+    document.body.classList.toggle('time-up', elapsed);
+    updateDisplay();
+    closeTimerEdit();
+}
+
+function closeTimerEdit() {
+    document.getElementById('editModal').style.display = "none";
+    document.getElementById('modalBg').style.display = "none";
 }
 
 // Pause or Resume the timer
@@ -216,6 +271,7 @@ function pauseResume() {
 function resetTimer() {
     clearInterval(interval);
     timeLeft = 0;
+    timerStarted = false;
 
     timerDisplay.innerText = "00:00";
     programDisplay.innerText = programName || "";

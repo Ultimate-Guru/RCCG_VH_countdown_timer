@@ -60,10 +60,31 @@
         <button class="close-manager-btn" onclick="toggleManager()">Close</button>
     </div>
 
+    <!-- Edit Running Timer Modal -->
+    <div class="edit-modal" id="editModal" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+        <h2 class="panel-title" id="editModalTitle">Edit Running Timer</h2>
+
+        <div class="field-group">
+            <label for="editProgramName">Program Name</label>
+            <input type="text" id="editProgramName" autocomplete="off">
+        </div>
+
+        <div class="field-group">
+            <label for="timeAdjustment">Adjust remaining time (minutes)</label>
+            <input type="number" id="timeAdjustment" step="1" placeholder="e.g. 5 or -5">
+        </div>
+
+        <p class="edit-help">Enter a positive number to add time or a negative number to reduce it.</p>
+        <button id="applyEditBtn" onclick="applyTimerEdit()">Apply Changes</button>
+        <button class="close-manager-btn" onclick="closeTimerEdit()">Cancel</button>
+    </div>
+
     <!-- Main Display -->
     <main class="stage">
-        <div class="program-name" id="programDisplay"></div>
-        <div id="timer">00:00</div>
+        <div class="program-name" id="programDisplay" role="button" tabindex="0"
+            aria-label="Edit the running timer's program name or remaining time" title="Click to edit the running timer"></div>
+        <div id="timer" role="button" tabindex="0"
+            aria-label="Edit the running timer's program name or remaining time" title="Click to edit the running timer">00:00</div>
     </main>
 
     <button id="openInputBtn" onclick="toggleInput();">
